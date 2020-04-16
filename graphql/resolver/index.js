@@ -163,6 +163,12 @@ module.exports = {
             throw new Error('Unauthenticated');
         }
         const user = await User.findById(userId);
+        const alreadyLiked= await Likes.findById(user.likes);
+        for(let i=0;i<alreadyLiked.likedBy.length;i++){
+            if(alreadyLiked.likedBy[i]==req.userId){
+                return "You have Already Liked This Profile"
+            }
+        }
         const likes = {
             $inc:{count:1},
             $push:{likedBy:`${req.userId}`},
